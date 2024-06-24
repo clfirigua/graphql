@@ -24,7 +24,7 @@ jobs:
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: build Docker Image
       run: |
-        docker build -t cfirigua/docker-graphql:1.0.0
+        docker build -t cfirigua/docker-graphql:1.0.0 .
     - name: Push Docker Image
       run:
         docker push cfirigua/docker-graphql:1.0.0 .
