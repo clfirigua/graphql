@@ -27,6 +27,6 @@ jobs:
         docker build -t cfirigua/docker-graphql:1.0.0 .
     - name: Push Docker Image
       run:
-        docker push cfirigua/docker-graphql:1.0.0 .
+        docker push cfirigua/docker-graphql:1.0.0
     # - name: Build the Docker image
     #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
