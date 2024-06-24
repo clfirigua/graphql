@@ -21,8 +21,12 @@ jobs:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
-        echo "iniciando login"
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        echo "fin del login"
+    - name: build Docker Image
+      run: |
+        docker build -t cfirigua/docker-graphql:1.0.0
+    - name: Push Docker Image
+      run:
+        docker push cfirigua/docker-graphql:1.0.0 .
     # - name: Build the Docker image
     #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
