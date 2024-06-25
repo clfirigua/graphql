@@ -27,10 +27,21 @@ jobs:
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - name: build Docker Image
+      env: 
         NEW_VERSION: ${{steps.version.outputs.version}}
       run: |
-        echo "docker image tag: $NEW_VERSION!!!!!!"
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        echo "version : $NEW_VERSION !!!!!"
+        docker build -t cfirigua/docker-graphql:$NEW_VERSION .
+        docker build -t cfirigua/docker-graphql:lastest .
+    - name: Push Docker Image
+      env: 
+        NEW_VERSION: ${{steps.version.outputs.version}}
+      run:
+        docker push cfirigua/docker-graphql:$NEW_VERSION
+        docker push cfirigua/docker-graphql:lastest
 
     # - name: Build the Docker image
     #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
