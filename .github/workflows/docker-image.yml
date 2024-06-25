@@ -7,41 +7,36 @@ on:
     branches: [ "master" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        fetch-dep: 0
+        fetch-depth: 0
     - name: Git Semantic Version
       uses: PaulHatch/semantic-version@v4.0.3
       with:
         major_pattern: "major:"
         minor_pattern: "feat:"
-        format: "${major}.${minor}.${patch}-prerelease${increment}"
+        format: "${{major}}.${{minor}}.${{patch}}-prerelease${{increment}}"
       id: version
     - name: docker login
       env:
-        DOCKER_USER: ${{secrets.DOCKER_USER}}
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: build Docker Image
-      env: 
-        NEW_VERSION: ${{steps.version.outputs.version}}
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        echo "version : $NEW_VERSION !!!!!"
+        echo "version: $NEW_VERSION !!!!!"
         docker build -t cfirigua/docker-graphql:$NEW_VERSION .
-        docker build -t cfirigua/docker-graphql:lastest .
+        docker build -t cfirigua/docker-graphql:latest .
     - name: Push Docker Image
-      env: 
-        NEW_VERSION: ${{steps.version.outputs.version}}
-      run:
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
+      run: |
         docker push cfirigua/docker-graphql:$NEW_VERSION
-        docker push cfirigua/docker-graphql:lastest
-
-    # - name: Build the Docker image
-    #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        docker push cfirigua/docker-graphql:latest
