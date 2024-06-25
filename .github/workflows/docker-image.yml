@@ -33,6 +33,7 @@ jobs:
       env: 
         NEW_VERSION: ${{steps.version.outputs.version}}
       run: |
+        echo "version :$NEW_VERSION"
         docker build -t cfirigua/docker-graphql:$NEW_VERSION .
         docker build -t cfirigua/docker-graphql:lastest .
     - name: Push Docker Image
